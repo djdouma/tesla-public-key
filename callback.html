@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tesla Authorization Code</title>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.5;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .copy-btn {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .copy-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tesla Authorization Code</h1>
+  <p>Copy the code below and paste it into your application:</p>
+  
+  <pre id="code">No code found in URL</pre>
+  
+  <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const error = params.get('error');
+    const errorDescription = params.get('error_description');
+
+    if (error) {
+      document.getElementById('code').textContent = 
+        `Error: ${error}\n${errorDescription || ''}`;
+      document.getElementById('code').style.background = '#ffebee';
+    } else if (code) {
+      document.getElementById('code').textContent = code;
+    }
+
+    function copyCode() {
+      const codeElement = document.getElementById('code');
+      navigator.clipboard.writeText(codeElement.textContent).then(() => {
+        const originalText = event.target.textContent;
+        event.target.textContent = 'Copied!';
+        setTimeout(() => {
+          event.target.textContent = originalText;
+        }, 1500);
+      }).catch(() => {
+        // Fallback for older browsers
+        const range = document.createRange();
+        range.selectNode(codeElement);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+      });
+    }
+  </script>
+</body>
+</html>
